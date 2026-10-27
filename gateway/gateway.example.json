@@ -1,0 +1,14 @@
+{
+  "keys": {
+    "demo-key": "demo-secret-change-me"
+  },
+  "upstreams": {
+    "market": "http://127.0.0.1:9000/market",
+    "trading": "http://127.0.0.1:9000/trading",
+    "transaction": "http://127.0.0.1:9000/transaction",
+    "wallet": "http://127.0.0.1:9000/wallet",
+    "defi": "http://127.0.0.1:9000/defi"
+  },
+  "rateLimit": { "requestsPerSecond": 10, "burst": 20 },
+  "recvWindowMs": 5000
+}
