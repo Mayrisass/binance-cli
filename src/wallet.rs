@@ -1,6 +1,6 @@
 use crate::utils::{
     decode_selected_entities, get_client_configuration, init_user_agent, read_json_as,
-    read_stdin_as,
+    read_stdin_as, render_qr,
 };
 use binance_sdk::config::{ConfigurationRestApi, PrivateKey};
 use binance_sdk::constants::WALLET_REST_API_PROD_URL;
@@ -469,6 +469,11 @@ struct DepositAddressArgs {
     amount: Option<rust_decimal::Decimal>,
     #[arg(help = r#""#, long)]
     recv_window: Option<i64>,
+    #[arg(
+        help = r#"Print the deposit address as a QR code instead of JSON"#,
+        long
+    )]
+    qr: bool,
     #[arg(short = 'i', long)]
     interactive: bool,
     #[arg(help = r#"Send all fields as JSON"#, long)]
@@ -2683,7 +2688,26 @@ async fn deposit_address(mut args: DepositAddressArgs) -> anyhow::Result<()> {
     let response = rest_client.deposit_address(params).await?;
 
     let data = response.data().await?;
-    println!("{}", serde_json::to_string_pretty(&data).unwrap());
+    if args.qr {
+        let address = data
+            .address
+            .as_deref()
+            .filter(|address| !address.is_empty())
+            .ok_or_else(|| anyhow::anyhow!("response has no deposit address"))?;
+        println!("{}", render_qr(address)?);
+        if let Some(coin) = data.coin.as_deref() {
+            println!("Coin:    {}", coin);
+        }
+        println!("Address: {}", address);
+        if let Some(tag) = data.tag.as_deref().filter(|tag| !tag.is_empty()) {
+            println!("Tag:     {}", tag);
+            println!(
+                "Warning: the QR code holds the address only. The tag (memo) must be entered separately, or the deposit may be lost."
+            );
+        }
+    } else {
+        println!("{}", serde_json::to_string_pretty(&data).unwrap());
+    }
     Ok(())
 }
 
