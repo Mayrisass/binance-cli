@@ -20,6 +20,7 @@ dialoguer = "0.12.0"
 dirs = "6.0.0"
 url = "2.5.8"
 reqwest = "0.13.4"
+qrcode = { version = "0.14.1", default-features = false }
 
 [build-dependencies]
 rustc_version = "0.4"

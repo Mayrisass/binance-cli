@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Added `--qr` to `wallet deposit-address`: prints the deposit address as a scannable QR code in the terminal, followed by the coin, the address and, when the coin needs one, the tag (memo), which the QR code does not include.
 - Added `gateway/`, a standalone API gateway crate that sits in front of the Market, Trading, Transaction, Wallet and DeFi APIs. It provides HMAC-SHA256 signature verification, per-key token-bucket rate limiting, configurable upstream routing, mock backends for local development, a signing client and end-to-end tests. It is built separately and does not change the `binance-cli` build.
 
 ## 2.2.0 - 2026-10-20

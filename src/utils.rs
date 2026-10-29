@@ -343,3 +343,16 @@ pub async fn wait_for_shutdown() {
         .await
         .expect("failed to listen for Ctrl+C");
 }
+
+pub fn render_qr(data: &str) -> anyhow::Result<String> {
+    use qrcode::QrCode;
+    use qrcode::render::unicode;
+
+    let code = QrCode::new(data.as_bytes())?;
+    // Swap the colours so the code reads correctly on a dark terminal background.
+    Ok(code
+        .render::<unicode::Dense1x2>()
+        .dark_color(unicode::Dense1x2::Light)
+        .light_color(unicode::Dense1x2::Dark)
+        .build())
+}
