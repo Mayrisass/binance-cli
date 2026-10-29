@@ -1,6 +1,182 @@
 # Change log
 
-## 2.0.0 - 2025-07-28
+## Unreleased
+
+- Added `gateway/`, a standalone API gateway crate that sits in front of the Market, Trading, Transaction, Wallet and DeFi APIs. It provides HMAC-SHA256 signature verification, per-key token-bucket rate limiting, configurable upstream routing, mock backends for local development, a signing client and end-to-end tests. It is built separately and does not change the `binance-cli` build.
+
+## 2.2.0 - 2026-10-20
+
+- Added Stocks REST API and WebSocket streams commands (`stocks`, `stocks-streams`).
+- Added CMS WebSocket streams commands (`cms-streams`).
+- Added W3W Prediction WebSocket streams commands (`w3w-prediction-streams`).
+- Updated `binance-sdk` to `76.0.0`.
+
+**Algo**
+
+### Added (1)
+
+- `algo volume-participation` (`POST /sapi/v1/algo/spot/newOrderVp`)
+
+### Changed (2)
+
+- Added parameter `clientAlgoId`
+  - affected methods:
+    - `algo cancel-algo-order-future-algo`
+    - `algo cancel-algo-order-spot-algo`
+
+**CMS WebSocket Streams**
+
+### Added (1)
+
+- `cms-streams com-announcement-en`
+
+**Derivatives Trading COIN Futures**
+
+### Changed (4)
+
+- Added parameter `contractType`
+  - affected methods:
+    - `futures-coin long-short-ratio`
+    - `futures-coin top-trader-long-short-ratio-positions`
+- `futures-coin top-trader-long-short-ratio-accounts`: added parameters `pair` and `contractType`, removed parameter `symbol`
+- `futures-coin get-income-history`: removed parameter `page`
+
+**Derivatives Trading Portfolio Margin**
+
+### Changed (2)
+
+- `derivatives-trading-portfolio-margin fund-collection-by-asset`: added parameters `amount` and `futureType`
+- `derivatives-trading-portfolio-margin new-um-algo-order`: added parameter `closePosition`
+
+### Removed (7)
+
+- `derivatives-trading-portfolio-margin cancel-all-um-open-conditional-orders` (`DELETE /papi/v1/um/conditional/allOpenOrders`)
+- `derivatives-trading-portfolio-margin cancel-um-conditional-order` (`DELETE /papi/v1/um/conditional/order`)
+- `derivatives-trading-portfolio-margin new-um-conditional-order` (`POST /papi/v1/um/conditional/order`)
+- `derivatives-trading-portfolio-margin query-all-current-um-open-conditional-orders` (`GET /papi/v1/um/conditional/openOrders`)
+- `derivatives-trading-portfolio-margin query-all-um-conditional-orders` (`GET /papi/v1/um/conditional/allOrders`)
+- `derivatives-trading-portfolio-margin query-current-um-open-conditional-order` (`GET /papi/v1/um/conditional/openOrder`)
+- `derivatives-trading-portfolio-margin query-um-conditional-order-history` (`GET /papi/v1/um/conditional/orderHistory`)
+
+**Derivatives Trading Portfolio Margin Pro**
+
+### Changed (1)
+
+- `derivatives-trading-portfolio-margin-pro fund-collection-by-asset`: added parameters `amount` and `futureType`
+
+**Derivatives Trading USDS Futures**
+
+### Changed (2)
+
+- `futures-usds modify-order`: added parameter `reduceOnly`
+- `futures-usds get-income-history`: removed parameter `page`
+
+**Dual Investment**
+
+### Changed (1)
+
+- `dual-investment subscribe-dual-investment-products`: removed parameter `autoCompoundPlan`
+
+### Removed (1)
+
+- `dual-investment change-auto-compound-status` (`POST /sapi/v1/dci/product/auto_compound/edit-status`)
+
+**Margin Trading**
+
+### Added (1)
+
+- `margin-trading query-margin-accounts-open-otootoco-order-lists` (`GET /sapi/v1/margin/oto/openOrderList`)
+
+**Stocks**
+
+### Added (17)
+
+- `stocks cancel-all-equity-orders` (`POST /sapi/v1/equity/order/cancel-all`)
+- `stocks cancel-equity-order` (`POST /sapi/v1/equity/order/cancel`)
+- `stocks create-renew-listen-key` (`POST /sapi/v1/equity/listenKey`)
+- `stocks current-open-orders` (`GET /sapi/v1/equity/order/open-orders`)
+- `stocks equity-order-detail` (`GET /sapi/v1/equity/order/detail`)
+- `stocks equity-order-history` (`GET /sapi/v1/equity/order/history`)
+- `stocks equity-trade-history` (`GET /sapi/v1/equity/trade/history`)
+- `stocks exchange-info` (`GET /sapi/v1/equity/market/exchangeInfo`)
+- `stocks latest-quote` (`GET /sapi/v1/equity/market/quote`)
+- `stocks place-equity-order` (`POST /sapi/v1/equity/order/place`)
+- `stocks sign-us-equity-disclaimer` (`POST /sapi/v1/equity/account/disclaimer`)
+- `stocks tokenized-assets` (`GET /sapi/v1/equity/market/tokenized-assets`)
+- `stocks tokenized-convert-history` (`GET /sapi/v1/equity/tokenized/history`)
+- `stocks tokenized-convert-status` (`GET /sapi/v1/equity/tokenized/convert-status`)
+- `stocks tokenized-mint` (`POST /sapi/v1/equity/tokenized/mint`)
+- `stocks tokenized-redeem` (`POST /sapi/v1/equity/tokenized/redeem`)
+- `stocks-streams`: `calendar-stream`, `kline-stream`, `order-report-stream`, `price-stream`, `quote-stream`, `tradability-stream`, `trading-status-stream`
+
+**Sub Account**
+
+### Changed (1)
+
+- `sub-account get-move-position-history-for-sub-account`: added parameter `productType`
+
+**W3W Prediction**
+
+### Added (11)
+
+- `w3w-prediction apply-mm-deposit` (`POST /sapi/v1/w3w/wallet/prediction/deposit/apply`)
+- `w3w-prediction apply-mm-withdraw` (`POST /sapi/v1/w3w/wallet/prediction/withdraw/apply`)
+- `w3w-prediction create-otc-blocktrade` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/create`)
+- `w3w-prediction fulfil-otc-blocktrade` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/fulfil`)
+- `w3w-prediction get-otc-blocktrade-detail` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/detail`)
+- `w3w-prediction get-otc-blocktrade-events` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/events`)
+- `w3w-prediction get-otc-reserved-balances` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/reserved-balances`)
+- `w3w-prediction list-otc-blocktrades` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/list`)
+- `w3w-prediction preview-otc-blocktrade` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/preview`)
+- `w3w-prediction remove-otc-blocktrades` (`POST /sapi/v1/w3w/wallet/prediction/otc/blocktrade/remove`)
+- `w3w-prediction-streams`: `batch-claim-partially-succeeded`, `fund-transfer-failed`, `fund-transfer-succeeded`, `limit-order-fully-filled`, `limit-order-partially-filled`, `limit-order-submission-failed`, `limit-order-submitted-successfully`, `market-buy-order-failed`, `market-buy-order-fully-filled`, `market-resolution-notification`, `market-sell-order-failed-expired`, `market-sell-order-fully-filled`, `prediction-order-book-by-market-id`, `reward-claim-failed`, `reward-claim-succeeded`
+
+**Wallet**
+
+### Added (1)
+
+- `wallet get-spot-asset-tags` (`GET /sapi/v1/spot/asset/tags`)
+
+### Changed (1)
+
+- `wallet query-user-wallet-balance`: added parameter `needBalanceDetail`
+
+## 2.1.1 - 2026-08-11
+
+- Invalid JSON passed via stdin or `--json` now reports the underlying parse error.
+- Fixed credential detection so that an empty API secret is no longer treated as a private key.
+- Clearer error message when `BINANCE_API_ENV` is set to an unsupported value.
+
+## 2.1.0 - 2026-08-06
+
+- Added WebSocket streams commands to the Rust CLI:
+  - `alpha-streams` (13 streams)
+  - `spot-streams` (15 market streams, plus `user-data`)
+  - `futures-usds-streams` (20 market streams, plus `user-data`)
+  - `futures-coin-streams` (19 market streams, plus `user-data`)
+  - `derivatives-trading-options-streams` (10 market streams, plus `user-data`)
+  - `derivatives-trading-portfolio-margin-streams` (`user-data`)
+  - `derivatives-trading-portfolio-margin-pro-streams` (`user-data`)
+  - `margin-trading-streams` (`risk-data`, `trade-data`)
+- Re-enabled the `fiat` commands.
+- `custom` requests now return an error instead of panicking when no profile or `BINANCE_API_KEY`/`BINANCE_SECRET_KEY` environment variables are set.
+- Updated `binance-sdk` to `67.0.0`.
+
+**Fiat**
+
+### Added (1)
+
+- `fiat get-order-detail` (`GET /sapi/v1/fiat/get-order-detail`)
+
+### Changed (4)
+
+- `fiat deposit`, `fiat fiat-withdraw`: request fields (`currency`, `amount`, `apiPaymentMethod`, and `accountInfo` for withdrawals) are now individual parameters instead of a single request object
+- Added parameters `transactionType`, `beginTime`, `endTime`, `page` and `rows`
+  - affected methods:
+    - `fiat get-fiat-deposit-withdraw-history` (`GET /sapi/v1/fiat/orders`)
+    - `fiat get-fiat-payments-history` (`GET /sapi/v1/fiat/payments`)
+
+## 2.0.0 - 2026-07-28
 
 - Rewrote binance-cli in Rust
 
